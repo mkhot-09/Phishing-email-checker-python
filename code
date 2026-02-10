@@ -1,0 +1,75 @@
+#just get a string
+def getstring():
+    text = input("""Enter the email (without newlines):
+""")
+    print("\n PROCESSING: ")
+    print(" ~~~~~~~~~~~")
+    return text
+
+#get a count for exclamation
+def countexcl(text):
+    char = list(text)
+    count =0
+    for char in char:
+        if char == "!":
+            count+=1
+    print(f"excl[!] count: {count},")
+    return count
+   
+#get a count for capitals
+def countcaps(text):
+    char = list(text)
+    count = 0
+    for char in char:
+        if char.isupper() == True:
+            count +=1
+        if char == ".":
+            count-=1
+    linkcount = 0
+    for i in range(len(text)):
+        if text[i] == "h" and text[i+1]=="t" and text[i+2] == "t" and text[i+3] == "p":
+            linkcount +=1
+    print(f"caps count: {count},")
+    print(f"link count: {linkcount},")
+    return count + linkcount
+   
+#get count for suspiciuous words
+def countsusw(text):
+    text = text.lower()
+    word = text.strip(" :,").split()
+    count = 0
+    susw = ["urgent", "act", "now", "immedietly", "account", "suspended", "verify", "login", "reset", "confirm", "https", "http", "www" ]
+    for word in word:
+        if word in susw:
+            print(f"sus word detected: {word},")
+            count+=1
+    print(f"\nsus words count: {count},")
+    return count
+
+def getscore(text):
+    suswscore = countsusw(text)*2
+    capsscore = countcaps(text)
+    exclscore = countexcl(text) *2
+    totalscore = exclscore + capsscore + suswscore
+    print(f"\n TOTAL SCORE: {totalscore},")
+    return totalscore
+
+def getresult(score):#
+    if score <5:
+        level = "low."
+    elif score <10:
+        level = "medium."
+    elif score > 10:
+        level = "High*, Procede with caution."
+    print(f"    Risk Level: {level}")
+   
+#main
+text = getstring()
+score = getscore(text)
+getresult(score)
+print("""
+TIPS:
+      - never click links before confirming the email has been sent by the actual sender.
+      - a good rule of thumb is to not open any emails from people you have not first contacted or don't expect to contact you.
+      - if you know an email is phishing, immedietly report it as phishing and delete the email.
+""")
